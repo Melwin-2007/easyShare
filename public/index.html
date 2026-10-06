@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Universal Share</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#2563eb" />
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  </head>
+  <body>
+    <div id="auth-screen" class="hidden">
+      <div class="card auth-card">
+        <h2>App Password Required</h2>
+        <input
+          type="password"
+          id="auth-password"
+          placeholder="Enter password..."
+        />
+        <button id="auth-submit" class="primary-btn">Login</button>
+        <p id="auth-error" class="error hidden"></p>
+      </div>
+    </div>
+
+    <div id="app" class="hidden">
+      <header>
+        <div class="header-left">
+          <h1>Universal Share</h1>
+          <span id="room-badge" class="badge">Room: public</span>
+          <button id="btn-qr" class="icon-btn" title="Show QR Code">📱</button>
+        </div>
+        <div class="header-right">
+          <div id="status-indicator" class="status online">
+            <span class="dot"></span> <span id="status-text">1 connected</span>
+          </div>
+          <button id="btn-theme" class="icon-btn">🌙</button>
+        </div>
+      </header>
+
+      <main>
+        <section class="upload-section">
+          <div class="tabs">
+            <button class="tab active" data-target="tab-text">Text</button>
+            <button class="tab" data-target="tab-file">Files</button>
+          </div>
+
+          <div id="tab-text" class="tab-content active">
+            <textarea
+              id="text-input"
+              placeholder="Type or paste text here..."
+            ></textarea>
+            <button id="btn-share-text" class="primary-btn">Share Text</button>
+          </div>
+
+          <div id="tab-file" class="tab-content">
+            <div id="drop-zone" class="drop-zone">
+              <p>Drag & drop files here, or click to select</p>
+              <p class="small">You can also paste images (Ctrl+V)</p>
+              <input type="file" id="file-input" multiple hidden />
+            </div>
+            <div class="mobile-actions">
+              <button id="btn-choose-files" class="secondary-btn">
+                📁 Choose Files
+              </button>
+              <button id="btn-camera" class="secondary-btn">📷 Camera</button>
+              <input
+                type="file"
+                id="camera-input"
+                accept="image/*,video/*"
+                capture
+                hidden
+              />
+            </div>
+            <div id="upload-progress-container" class="hidden">
+              <div class="progress-bar">
+                <div id="upload-progress" class="progress-fill"></div>
+              </div>
+              <p id="upload-status" class="small">Uploading...</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="controls-section">
+          <input type="text" id="search-input" placeholder="Search..." />
+          <select id="filter-select">
+            <option value="all">All Types</option>
+            <option value="text">Text</option>
+            <option value="images">Images</option>
+            <option value="videos">Videos</option>
+            <option value="documents">Documents</option>
+            <option value="other">Other</option>
+          </select>
+          <button id="btn-download-all" class="secondary-btn">
+            Download All
+          </button>
+          <button id="btn-clear-all" class="danger-btn">Clear Room</button>
+        </section>
+
+        <section id="items-feed" class="items-feed">
+          <!-- Items injected here -->
+        </section>
+      </main>
+
+      <!-- Modals -->
+      <div id="qr-modal" class="modal hidden">
+        <div class="modal-content">
+          <span class="close-btn" id="close-qr">&times;</span>
+          <h3>Join Room</h3>
+          <p>Scan to join room: <strong id="qr-room-name"></strong></p>
+          <canvas id="qr-canvas"></canvas>
+          <button
+            id="btn-new-room"
+            class="secondary-btn"
+            style="width: 100%; margin-top: 1rem"
+          >
+            Generate Random Room
+          </button>
+        </div>
+      </div>
+
+      <!-- Preview Modal -->
+      <div id="preview-modal" class="modal hidden">
+        <div class="modal-content preview-content">
+          <span class="close-btn" id="close-preview">&times;</span>
+          <div id="preview-container"></div>
+        </div>
+      </div>
+
+      <div id="toast-container"></div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/app.js"></script>
+  </body>
+</html>
